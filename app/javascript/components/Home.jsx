@@ -1,37 +1,43 @@
 import React from "react"
 import PropTypes from "prop-types"
+
 class Home extends React.Component {
   constructor(props) {
     super(props);
 
+    const sessionToken = sessionStorage.getItem("sessionToken");
+
     this.state = {
       error: null,
       isLoaded: false,
-      items: []
+      items: [],
+      sessionToken,
     };
-  }
-
-  tokenInit() {
-
   }
 
   fetchOrders() {
 
     console.log("fetch");
-    // console.log(windowSessionToken);
-    var headers = new Headers({ "Authorization": "Bearer " + window.sessionToken });
+    console.log(this.state.sessionToken);
+    var headers = new Headers({ "Authorization": "Bearer " + this.state.sessionToken });
 
     fetch("/products", { headers })
       .then(response => response.json())
-      .then(result => {
-        console.log("result");
-        console.log(result);
-        var result = result.products;
+      .then(data => {
+        var products = data.products;
 
-        this.setState({
-          isLoaded: true,
-          items: result.items
-        });
+        if (products === undefined || products.length == 0) {
+          this.setState({
+            isLoaded: true,
+            error: true,
+          });
+        } else {
+          console.log('in else');
+          this.setState({
+            isLoaded: true,
+            items: products
+          });
+        }
       },
       // Note: it's important to handle errors here
       // instead of a catch() block so that we don't swallow
@@ -46,25 +52,29 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-    this.tokenInit();
     this.fetchOrders();
   }
 
   render () {
+    console.log('in render');
     const { error, isLoaded, items } = this.state;
 
     if (error) {
-      return <div>Error: {error.message}</div>;
+      return <div>Error:</div>;
     } else if (!isLoaded) {
       return <div>Loading...</div>;
     } else {
       return (
         <ul>
-          {items.map(item => (
-            <li key={item.id}>
-              {item.name} {item.price}
-            </li>
-          ))}
+          {
+            items.forEach((product) => {
+              var link = `<a target="_top" href="https://<%= @shop_origin %>/admin/products/${product.id}">`;
+              console.log(product);
+              <li key={product.id}>
+                {link} {product.title}
+              </li>
+            })
+          }
         </ul>
       );
     }
