@@ -1,5 +1,8 @@
 import React from "react"
 import PropTypes from "prop-types"
+import '@shopify/polaris/dist/styles.css';
+import enTranslations from '@shopify/polaris/locales/en.json';
+import {AppProvider, Page, Card, Button, DataTable} from '@shopify/polaris';
 
 class Home extends React.Component {
   constructor(props) {
@@ -59,23 +62,49 @@ class Home extends React.Component {
     console.log('in render');
     const { error, isLoaded, items } = this.state;
 
+    console.log(items);
+
+    const rows = [
+      ['123', '345'],
+      ['123', '345'],
+      ['123', '345'],
+      ['123', '345'],
+    ]
     if (error) {
       return <div>Error:</div>;
     } else if (!isLoaded) {
       return <div>Loading...</div>;
     } else {
       return (
-        <ul>
-          {
-            items.forEach((product) => {
-              var link = `<a target="_top" href="https://<%= @shop_origin %>/admin/products/${product.id}">`;
-              console.log(product);
-              <li key={product.id}>
-                {link} {product.title}
-              </li>
-            })
-          }
-        </ul>
+        <AppProvider i18n={enTranslations}>
+          <Page title="Example app">
+            <Card sectioned>
+              <Button onClick={() => alert('Button clicked!')}>Example button</Button>
+              <ul>
+                {
+                  items.forEach((product) => {
+                    var link = `<a target="_top" href="https://<%= @shop_origin %>/admin/products/${product.id}">`;
+                    // console.log(product);
+                    <li key={product.id}>
+                      {link} {product.title}
+                    </li>
+                  })
+                }
+              </ul>
+              <DataTable
+                columnContentTypes={[
+                  'text',
+                  'numeric',
+                ]}
+                headings={[
+                  'Product',
+                  'Price',
+                ]}
+                rows={rows}
+              />
+            </Card>
+          </Page>
+        </AppProvider>
       );
     }
   }
