@@ -16,5 +16,6 @@
 
     sessionStorage.setItem("sessionToken", window.sessionToken);
   });
+  console.log('in index.html.erb');
 </script>
-<%= react_component("Home", { greeting: "Hello from react-rails." }) %>
+<%= react_component("Home", { shopOrigin: @shop_origin }) %>

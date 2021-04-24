@@ -2,7 +2,12 @@ import React from "react"
 import PropTypes from "prop-types"
 import '@shopify/polaris/dist/styles.css';
 import enTranslations from '@shopify/polaris/locales/en.json';
-import {AppProvider, Page, Card, Button, DataTable} from '@shopify/polaris';
+import { AppProvider, Page, Card, Button } from '@shopify/polaris';
+import { Button } from '@material-ui/data-grid';
+import RefreshIcon from '@material-ui/icons/Refresh';
+
+import OrderDisplay from './OrderDisplay'
+import SkeletonPageTemplate from './SkeletonPageTemplate'
 
 class Home extends React.Component {
   constructor(props) {
@@ -18,10 +23,11 @@ class Home extends React.Component {
     };
   }
 
-  fetchOrders() {
+  componentDidMount() {
+    this.fetchOrders();
+  }
 
-    console.log("fetch");
-    console.log(this.state.sessionToken);
+  fetchOrders() {
     var headers = new Headers({ "Authorization": "Bearer " + this.state.sessionToken });
 
     fetch("/products", { headers })
@@ -54,63 +60,50 @@ class Home extends React.Component {
     )
   }
 
-  componentDidMount() {
-    this.fetchOrders();
-  }
-
   render () {
     console.log('in render');
+    const { shopOrigin } = this.props;
     const { error, isLoaded, items } = this.state;
 
     console.log(items);
 
-    const rows = [
-      ['123', '345'],
-      ['123', '345'],
-      ['123', '345'],
-      ['123', '345'],
-    ]
+    let content;
+
+
     if (error) {
-      return <div>Error:</div>;
+      content = (
+        <div>
+          Error:
+          <Button
+            variant="contained" color="primary" onClick={() => { this.fetchOrders() }}
+            startIcon={<RefreshIcon />}
+          >
+            Refresh
+          </Button>
+        </div>
+      );
     } else if (!isLoaded) {
-      return <div>Loading...</div>;
+      content = <SkeletonPageTemplate />
     } else {
-      return (
-        <AppProvider i18n={enTranslations}>
-          <Page title="Example app">
-            <Card sectioned>
-              <Button onClick={() => alert('Button clicked!')}>Example button</Button>
-              <ul>
-                {
-                  items.forEach((product) => {
-                    var link = `<a target="_top" href="https://<%= @shop_origin %>/admin/products/${product.id}">`;
-                    // console.log(product);
-                    <li key={product.id}>
-                      {link} {product.title}
-                    </li>
-                  })
-                }
-              </ul>
-              <DataTable
-                columnContentTypes={[
-                  'text',
-                  'numeric',
-                ]}
-                headings={[
-                  'Product',
-                  'Price',
-                ]}
-                rows={rows}
-              />
-            </Card>
-          </Page>
-        </AppProvider>
+      content = (
+        <OrderDisplay rows={items} isLoaded={isLoaded} />
       );
     }
+
+    return (
+      <AppProvider i18n={enTranslations}>
+        <Page title="Choose orders" fullWidth>
+          <Card sectioned>
+            {content}
+          </Card>
+        </Page>
+      </AppProvider>
+    );
   }
 }
 
 Home.propTypes = {
-  greeting: PropTypes.string
+  shopOrigin: PropTypes.string
 };
+
 export default Home
