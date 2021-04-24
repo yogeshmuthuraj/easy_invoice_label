@@ -19,7 +19,9 @@ export default function OrderDisplay(props) {
 
   rows.map((row, index) => {
     var header = columnHeaders[index];
-    var width = (header.match(/is/g) || []).length * 100;
+    console.log('header', header);
+    var width = (header.length) * 100;
+    console.log('width', width);
 
     columns.push({
       field: header, headerName: toTitleCase(header), sortable: true, width: width

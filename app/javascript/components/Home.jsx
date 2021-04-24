@@ -46,9 +46,9 @@ class Home extends React.Component {
           resolve(data.sessionToken || "");
         });
       });
+      console.log('window.sessionToken: ', window.sessionToken);
 
       sessionStorage.setItem("sessionToken", window.sessionToken);
-      console.log('window.sessionToken: ', window.sessionToken);
     });
   }
 
@@ -110,8 +110,8 @@ class Home extends React.Component {
       content = (
         <div>
           <Alert severity="error" style={{ fontSize: '20px' }}>
-            <AlertTitle>Error</AlertTitle>
-            Loading error — <strong>please reload</strong>
+            <AlertTitle style={{ fontSize: '20px' }}>Error</AlertTitle>
+            Loading error — <strong>Reload</strong>
             <IconButton aria-label="delete" onClick={() => { this.handleRefresh() }}>
               <RefreshIcon />
             </IconButton>
