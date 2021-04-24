@@ -60,7 +60,7 @@ export default function OrderDisplay(props) {
       <Page title="Upload carrier file" fullWidth fullHeight>
         <Card>
           <CarrierData />
-        c
+        </Card>
       </Page>
     </React.Fragment>
   );

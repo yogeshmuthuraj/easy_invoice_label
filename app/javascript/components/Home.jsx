@@ -45,12 +45,12 @@ class Home extends React.PureComponent {
 
     var headers = new Headers({ "Authorization": "Bearer " + sessionToken });
 
-    fetch("/products", { headers })
+    fetch("/orders", { headers })
       .then(response => response.json())
       .then(data => {
-        var products = data.products;
+        var orders = data.orders;
 
-        if (products === undefined || products.length == 0) {
+        if (orders === undefined || orders.length == 0) {
           this.setState({
             isLoaded: true,
             error: true,
@@ -59,7 +59,7 @@ class Home extends React.PureComponent {
           console.log('in else');
           this.setState({
             isLoaded: true,
-            items: products
+            items: orders
           });
         }
       },
@@ -94,15 +94,17 @@ class Home extends React.PureComponent {
 
     if (error) {
       content = (
-        <div>
-          <Alert severity="error" style={{ fontSize: '20px' }}>
-            <AlertTitle style={{ fontSize: '20px' }}>Error</AlertTitle>
-            Loading error — <strong>Reload</strong>
-            <IconButton aria-label="delete" onClick={() => { this.handleRefresh() }}>
-              <RefreshIcon />
-            </IconButton>
-          </Alert>
-        </div>
+        <Page fullWidth fullHeight>
+          <Card>
+            <Alert severity="error" style={{ fontSize: '20px' }}>
+              <AlertTitle style={{ fontSize: '20px' }}>Error</AlertTitle>
+              Loading error — <strong>Reload</strong>
+              <IconButton aria-label="delete" onClick={() => { this.handleRefresh() }}>
+                <RefreshIcon />
+              </IconButton>
+            </Alert>
+          </Card>
+        </Page>
       );
     } else if (!isLoaded) {
       content = <SkeletonPageTemplate fullWidth />

@@ -2,7 +2,8 @@
 
 class OrdersController < AuthenticatedController
   def index
-    @orders = ShopifyAPI::Order.find(:all, params: { limit: 10 })
-    render(json: { orders: @orders })
+    @orders = ShopifyAPI::Order.find(:all)
+
+    render json: { orders: @orders.to_a.map(&:serializable_hash) }
   end
 end
