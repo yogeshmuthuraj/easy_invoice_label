@@ -43,20 +43,24 @@ export default function OrderDisplay(props) {
   return (
     <React.Fragment>
       <Page title="Choose orders" fullWidth fullHeight>
-        <div style={{ height: 500, width: '100%' }}>
-          <DataGrid
-            autoPageSize
-            className="font-size-14"
-            rows={rows} columns={columns} pageSize={10} checkboxSelection
-            onSelectionModelChange={(newSelection) => {
-              setSelectionModel(newSelection.selectionModel);
-            }}
-            selectionModel={selectionModel}
-          />
-        </div>
+        <Card>
+          <div style={{ height: 500, width: '100%' }}>
+            <DataGrid
+              autoPageSize
+              className="font-size-14"
+              rows={rows} columns={columns} pageSize={10} checkboxSelection
+              onSelectionModelChange={(newSelection) => {
+                setSelectionModel(newSelection.selectionModel);
+              }}
+              selectionModel={selectionModel}
+            />
+          </div>
+        </Card>
       </Page>
       <Page title="Upload carrier file" fullWidth fullHeight>
-        <CarrierData />
+        <Card>
+          <CarrierData />
+        c
       </Page>
     </React.Fragment>
   );
