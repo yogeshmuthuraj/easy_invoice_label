@@ -2,13 +2,15 @@ import React from "react"
 import PropTypes from "prop-types"
 
 import '@shopify/polaris/dist/styles.css';
-import { AppProvider, Page, Card } from '@shopify/polaris';
+import { AppProvider, Page, Card, Layout } from '@shopify/polaris';
 import enTranslations from '@shopify/polaris/locales/en.json';
 
 import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import RefreshIcon from '@material-ui/icons/Refresh';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 import OrderDisplay from './OrderDisplay';
 import SkeletonPageTemplate from './SkeletonPageTemplate';
@@ -29,6 +31,7 @@ class Home extends React.Component {
   }
 
   initToken() {
+    console.log('in initoken');
     document.addEventListener("DOMContentLoaded", async function() {
       var SessionToken = window["app-bridge"].actions.SessionToken
       var app = window.app;
@@ -105,9 +108,10 @@ class Home extends React.Component {
 
     if (error) {
       content = (
-        <div >
+        <div>
           <Alert severity="error" style={{ fontSize: '20px' }}>
-            Loading error
+            <AlertTitle>Error</AlertTitle>
+            Loading error — <strong>please reload</strong>
             <IconButton aria-label="delete" onClick={() => { this.handleRefresh() }}>
               <RefreshIcon />
             </IconButton>
@@ -115,7 +119,7 @@ class Home extends React.Component {
         </div>
       );
     } else if (!isLoaded) {
-      content = <SkeletonPageTemplate />
+      content = <SkeletonPageTemplate fullWidth />
     } else {
       content = (
         <OrderDisplay rows={items} />
@@ -124,12 +128,19 @@ class Home extends React.Component {
 
     return (
       <div style={{ fontSize: '20px' }}>
+        <CssBaseline />
         <AppProvider i18n={enTranslations}>
-          <Page title="Choose orders" fullWidth fullHeight>
-            <Card sectioned>
-              {content}
-            </Card>
-          </Page>
+          <Layout>
+            <Layout.Section>{/* Page-level banners */}</Layout.Section>
+            <Layout.Section>
+              <Page title="Choose orders" fullWidth fullHeight>
+                <Card sectioned>
+                  {content}
+                </Card>
+              </Page>
+            </Layout.Section>
+            <Layout.Section>{/* Page footer content */}</Layout.Section>
+          </Layout>
         </AppProvider>
       </div>
     );
