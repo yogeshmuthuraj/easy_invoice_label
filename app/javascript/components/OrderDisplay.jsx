@@ -1,12 +1,9 @@
 import React from "react"
 import PropTypes from "prop-types"
+
+import { Page, Card } from '@shopify/polaris';
+
 import { DataGrid } from '@material-ui/data-grid';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
 import Button from '@material-ui/core/Button';
 
 import CarrierData from './CarrierData';
@@ -44,30 +41,23 @@ export default function OrderDisplay(props) {
   console.log(selectionModel);
 
   return (
-    <div style={{ height: 500, width: '100%' }}>
-      <DataGrid
-        autoPageSize
-        className="font-size-14"
-        rows={rows} columns={columns} pageSize={10} checkboxSelection
-        onSelectionModelChange={(newSelection) => {
-          setSelectionModel(newSelection.selectionModel);
-        }}
-        selectionModel={selectionModel}
-      />
-      <Router>
-        <div className="pull-right">
-          <Link to="/carrierinput">
-            <Button variant="contained" color="primary">
-              Next
-            </Button>
-          </Link>
+    <React.Fragment>
+      <Page title="Choose orders" fullWidth fullHeight>
+        <div style={{ height: 500, width: '100%' }}>
+          <DataGrid
+            autoPageSize
+            className="font-size-14"
+            rows={rows} columns={columns} pageSize={10} checkboxSelection
+            onSelectionModelChange={(newSelection) => {
+              setSelectionModel(newSelection.selectionModel);
+            }}
+            selectionModel={selectionModel}
+          />
         </div>
-        <Switch>
-          <Route path="/carrierinput">
-            <CarrierData selectedRowIds={selectionModel} allRows={rows} />
-          </Route>
-        </Switch>
-      </Router>
-    </div>
+      </Page>
+      <Page title="Upload carrier file" fullWidth fullHeight>
+        <CarrierData />
+      </Page>
+    </React.Fragment>
   );
 }

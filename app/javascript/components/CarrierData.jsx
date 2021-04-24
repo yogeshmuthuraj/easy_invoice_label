@@ -30,7 +30,7 @@ class CarrierData extends React.PureComponent {
     let paperOrientation = 'portrait'; // Switch
 
     return (
-      <div>This is carrier data</div>
+      <div>{this.uploadFile()}</div>
     );
   }
 }

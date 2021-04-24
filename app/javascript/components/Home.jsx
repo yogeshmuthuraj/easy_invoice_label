@@ -12,8 +12,16 @@ import IconButton from '@material-ui/core/IconButton';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+
 import OrderDisplay from './OrderDisplay';
 import SkeletonPageTemplate from './SkeletonPageTemplate';
+import CarrierData from './CarrierData';
 
 class Home extends React.PureComponent {
   constructor(props) {
@@ -28,31 +36,6 @@ class Home extends React.PureComponent {
 
   componentDidMount() {
     this.fetchOrders();
-  }
-
-  initToken() {
-    console.log('in initoken');
-    document.addEventListener("DOMContentLoaded", async function() {
-      var SessionToken = window["app-bridge"].actions.SessionToken
-      var app = window.app;
-
-      app.dispatch(
-        SessionToken.request(),
-      );
-
-      console.log('SessionToken', SessionToken);
-
-      // Save a session token for future requests
-      window.sessionToken = await new Promise((resolve) => {
-        app.subscribe(SessionToken.ActionType.RESPOND, (data) => {
-          resolve(data.sessionToken || "");
-        });
-      });
-      console.log('window.sessionToken: ', window.sessionToken);
-
-      sessionStorage.setItem("sessionToken", window.sessionToken);
-      this.fetchOrders()
-    });
   }
 
   fetchOrders() {
@@ -97,7 +80,6 @@ class Home extends React.PureComponent {
       isLoaded: false,
       error: null,
     });
-    // this.initToken();
     this.fetchOrders();
   }
 
@@ -134,17 +116,7 @@ class Home extends React.PureComponent {
       <div style={{ fontSize: '20px' }}>
         <CssBaseline />
         <AppProvider i18n={enTranslations}>
-          <Layout>
-            <Layout.Section>{/* Page-level banners */}</Layout.Section>
-            <Layout.Section>
-              <Page title="Choose orders" fullWidth fullHeight>
-                <Card sectioned>
-                  {content}
-                </Card>
-              </Page>
-            </Layout.Section>
-            <Layout.Section>{/* Page footer content */}</Layout.Section>
-          </Layout>
+          {content}
         </AppProvider>
       </div>
     );
