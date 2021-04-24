@@ -23,21 +23,14 @@ const columns = [
 
 export default function OrderDisplay(props) {
   const { rows } = props;
-  console.log('props items');
-  console.log(rows);
-  const columnHeaders = Object.keys(rows); // for each
+  const columnHeaders = Object.keys(rows[0]);
 
   let columns = [];
 
-  columnHeaders.map((columnHeader) => {
-    columns.push({ field: columnHeader, headerName: columnHeader, sortable: true})
+  rows.map((row, index) => {
+    console.log(row);
+    columns.push({ field: columnHeaders[index], headerName: columnHeaders[index], sortable: true})
   });
-
-  console.log("columnHeaders")
-  console.log(columnHeaders);
-
-  console.log('columns');
-  console.log(columns);
 
   return (
     <div style={{ height: 400, width: '100%', fontSize: '15em' }}>
