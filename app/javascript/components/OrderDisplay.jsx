@@ -1,6 +1,15 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { DataGrid } from '@material-ui/data-grid';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+import Button from '@material-ui/core/Button';
+
+import CarrierData from './CarrierData';
 
 function toTitleCase(str) {
   str = str.replace(/_/g, ' ');
@@ -16,11 +25,12 @@ export default function OrderDisplay(props) {
   const { rows } = props;
   const columnHeaders = Object.keys(rows[0]);
   let columns = [];
+  const isRowSelected = true;
 
   rows.map((row, index) => {
     var header = columnHeaders[index];
     console.log('header', header);
-    var width = (header.length) * 100;
+    var width = (header.length) * 50;
     console.log('width', width);
 
     columns.push({
@@ -28,13 +38,36 @@ export default function OrderDisplay(props) {
     })
   });
 
+  const [selectionModel, setSelectionModel] = React.useState([]);
+
+  console.log('selectionModel');
+  console.log(selectionModel);
+
   return (
     <div style={{ height: 500, width: '100%' }}>
       <DataGrid
         autoPageSize
         className="font-size-14"
         rows={rows} columns={columns} pageSize={10} checkboxSelection
+        onSelectionModelChange={(newSelection) => {
+          setSelectionModel(newSelection.selectionModel);
+        }}
+        selectionModel={selectionModel}
       />
+      <Router>
+        <div className="pull-right">
+          <Link to="/carrierinput">
+            <Button variant="contained" color="primary">
+              Next
+            </Button>
+          </Link>
+        </div>
+        <Switch>
+          <Route path="/carrierinput">
+            <CarrierData selectedRowIds={selectionModel} allRows={rows} />
+          </Route>
+        </Switch>
+      </Router>
     </div>
   );
 }

@@ -15,7 +15,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import OrderDisplay from './OrderDisplay';
 import SkeletonPageTemplate from './SkeletonPageTemplate';
 
-class Home extends React.Component {
+class Home extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -40,6 +40,8 @@ class Home extends React.Component {
         SessionToken.request(),
       );
 
+      console.log('SessionToken', SessionToken);
+
       // Save a session token for future requests
       window.sessionToken = await new Promise((resolve) => {
         app.subscribe(SessionToken.ActionType.RESPOND, (data) => {
@@ -49,14 +51,12 @@ class Home extends React.Component {
       console.log('window.sessionToken: ', window.sessionToken);
 
       sessionStorage.setItem("sessionToken", window.sessionToken);
+      this.fetchOrders()
     });
   }
 
   fetchOrders() {
-    this.setState({
-      isLoaded: false,
-      error: null,
-    });
+    console.log('in fetchOrders');
 
     const sessionToken = sessionStorage.getItem("sessionToken");
 
@@ -92,9 +92,13 @@ class Home extends React.Component {
     )
   }
 
-  async handleRefresh() {
-    await this.initToken();
-    await this.fetchOrders();
+  handleRefresh() {
+    this.setState({
+      isLoaded: false,
+      error: null,
+    });
+    // this.initToken();
+    this.fetchOrders();
   }
 
   render () {
