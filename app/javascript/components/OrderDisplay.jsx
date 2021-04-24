@@ -22,10 +22,10 @@ const columns = [
 ];
 
 export default function OrderDisplay(props) {
-  const { rows, isLoaded } = props;
+  const { rows } = props;
   console.log('props items');
   console.log(rows);
-  const columnHeaders = Object.keys(rows);
+  const columnHeaders = Object.keys(rows); // for each
 
   let columns = [];
 
@@ -40,11 +40,10 @@ export default function OrderDisplay(props) {
   console.log(columns);
 
   return (
-    <div style={{ height: 400, width: '100%' }}>
+    <div style={{ height: 400, width: '100%', fontSize: '15em' }}>
       <DataGrid
         autoHeight autoPageSize
-        loading={isLoaded}
-        style={{ fontSize: '63px' }} rows={items} columns={columns} pageSize={5} checkboxSelection
+        rows={rows} columns={columns} pageSize={5} checkboxSelection
       />
     </div>
   );

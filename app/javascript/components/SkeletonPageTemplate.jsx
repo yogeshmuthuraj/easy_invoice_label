@@ -1,6 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-import {TextContainer, Card, Layout, SkeletonBodyText, SkeletonPage, SkeletonDisplayText} from '@shopify/polaris';
+import { TextContainer, Card, Layout, SkeletonBodyText, SkeletonPage, SkeletonDisplayText } from '@shopify/polaris';
 
 export default function SkeletonPageTemplate() {
   return (
