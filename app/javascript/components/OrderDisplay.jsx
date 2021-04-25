@@ -45,10 +45,6 @@ export default function OrderDisplay(props) {
       })
     });
 
-    console.log('rows');
-
-    console.log(rows);
-
     rows.map((row, index) => {
       modifiedRows.push(Object.assign(row, { id: `${index + '_' + row.Name}` }));
     });
@@ -75,6 +71,14 @@ export default function OrderDisplay(props) {
     })
   }
 
+  function handleCancel() {
+    history.push("/");
+  }
+
+  function handleBack() {
+    history.goBack();
+  }
+
   return (
     <React.Fragment>
       <Page fullHeight>
@@ -94,12 +98,19 @@ export default function OrderDisplay(props) {
             />
           </div>
         </Card>
+        <Button variant="outlined" onClick={handleBack} className="margin-top-20 pull-left">
+          Back
+        </Button>
+        <Button variant="outlined" color="primary" onClick={handleCancel} className="margin-left-10 margin-top-20 pull-left">
+          Cancel
+        </Button>
         <Button
           variant="contained" color="primary" onClick={handleNext} className="margin-top-20 pull-right"
           disabled={nextDisabled}
         >
           Next
         </Button>
+
       </Page>
     </React.Fragment>
   );

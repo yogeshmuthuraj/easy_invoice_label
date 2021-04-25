@@ -98,7 +98,7 @@ export default function OrderInput(props) {
       state: {
         rows: csvJson,
       }
-    })
+    });
   }
 
   return (

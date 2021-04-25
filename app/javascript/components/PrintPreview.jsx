@@ -8,6 +8,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
+import { useHistory } from "react-router-dom";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -21,6 +23,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PrintPreview(props) {
   const classes = useStyles();
+
+  let history = useHistory();
+
+  function handleCancel() {
+    history.push("/");
+  }
+
+  function handleBack() {
+    history.goBack();
+  }
 
   return (
     <React.Fragment>
@@ -55,6 +67,12 @@ export default function PrintPreview(props) {
             </Grid>
           </div>
         </Card>
+        <Button variant="outlined" onClick={handleBack} className="margin-top-20 pull-left">
+          Back
+        </Button>
+        <Button variant="outlined" color="primary" onClick={handleCancel} className="margin-left-10 margin-top-20 pull-left">
+          Cancel
+        </Button>
       </Page>
     </React.Fragment>
   );

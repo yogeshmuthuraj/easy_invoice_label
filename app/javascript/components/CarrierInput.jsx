@@ -81,26 +81,45 @@ export default function CarrierInput(props) {
   const location = useLocation();
 
   function handleUpload(carrierRows) {
-    // history.push({
-    //   pathname: '/orderDisplay',
-    //   state: {
-    //     rows: csvJson,
-    //   }
-    // })
-    let orderRows = JSON.parse(location.state.rows);
-    let selectedRowIds = JSON.parse(location.state.selectedRowIds);
-    console.log('carrierRows');
-    console.log(carrierRows);
+    let orderRows = location.state.rows;
+    let selectedRowIds = location.state.selectedRowIds;
 
-    console.log('orderRows');
-    console.log(orderRows);
+    // select rows
+    let selectedOrderRows = [];
 
-    console.log('selectedRowIds');
-    console.log(selectedRowIds);
+    orderRows.map((orderRow, index) => {
+      selectedRowIds.map((selectedRowId) => {
+        if (orderRows[index].id == selectedRowId) {
+          selectedOrderRows.push(orderRows[index]);
+        }
+      })
+    })
+
+    mergeCsvs(selectedOrderRows, JSON.parse(carrierRows))
   }
 
-  function mergeCsvs() {
+  function mergeCsvs(selectedOrderRows, carrierRows) {
+    console.log('carrierRows; ', carrierRows);
+    console.log(selectedOrderRows);
+    let mergedCsv = [];
 
+    selectedOrderRows.map((selectedOrderRow, index) => {
+      carrierRows.map((carrierRow) => {
+        if (selectedOrderRows[index].Name == carrierRow.Name) {
+          mergedCsv.push(Object.assign(selectedOrderRows[index], carrierRow))
+        }
+      });
+    });
+
+    console.log(mergedCsv);
+  }
+
+  function handleCancel() {
+    history.push("/");
+  }
+
+  function handleBack() {
+    history.goBack();
   }
 
   return (
@@ -109,15 +128,21 @@ export default function CarrierInput(props) {
         <div className="pad-bottom-20">
           Choose carriers
         </div>
-          <div className={classes.root}>
-            <Grid container spacing={3}>
-              <Grid item xs={6}>
-                <Paper className={classes.paper}>
-                  {uploadButton}
-                </Paper>
-              </Grid>
+        <div className={classes.root}>
+          <Grid container spacing={3}>
+            <Grid item xs={6}>
+              <Paper className={classes.paper}>
+                {uploadButton}
+              </Paper>
             </Grid>
-          </div>
+          </Grid>
+        </div>
+        <Button variant="outlined" onClick={handleBack} className="margin-top-20 pull-left">
+          Back
+        </Button>
+        <Button variant="outlined" color="primary" onClick={handleCancel} className="margin-left-10 margin-top-20 pull-left">
+          Cancel
+        </Button>
       </Page>
     </React.Fragment>
   );
