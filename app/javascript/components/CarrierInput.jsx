@@ -95,7 +95,8 @@ export default function CarrierInput(props) {
       })
     })
 
-    mergeCsvs(selectedOrderRows, JSON.parse(carrierRows))
+    let mergedCsv = mergeCsvs(selectedOrderRows, JSON.parse(carrierRows))
+    let sortedCsv = sortingBasedOnCarrier(mergedCsv);
   }
 
   function mergeCsvs(selectedOrderRows, carrierRows) {
@@ -111,7 +112,11 @@ export default function CarrierInput(props) {
       });
     });
 
-    console.log(mergedCsv);
+    return mergedCsv;
+  }
+
+  function sortingBasedOnCarrier(mergedCsv) {
+    return mergedCsv.sort((a, b) => (a.color > b.color) ? 1 : (a.color === b.color) ? ((a.size > b.size) ? 1 : -1) : -1 );
   }
 
   function handleCancel() {
