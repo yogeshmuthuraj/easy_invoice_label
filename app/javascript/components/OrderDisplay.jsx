@@ -27,7 +27,6 @@ export default function OrderDisplay(props) {
   if (props.from == 'fetchOrders') {
     rows = props.rows;
     columnHeaders = Object.keys(rows[0]);
-    rows.shift();
 
     columnHeaders.map((columnHeader) => {
       columns.push({
@@ -39,13 +38,16 @@ export default function OrderDisplay(props) {
 
     rows = JSON.parse(location.state.rows);
     columnHeaders = Object.keys(rows[0]);
-    rows.shift();
 
     columnHeaders.map((columnHeader) => {
       columns.push({
         field: columnHeader, headerName: toTitleCase(columnHeader), sortable: true, width: 200
       })
     });
+
+    console.log('rows');
+
+    console.log(rows);
 
     rows.map((row, index) => {
       modifiedRows.push(Object.assign(row, { id: index }));
