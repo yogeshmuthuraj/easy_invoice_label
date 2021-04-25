@@ -93,7 +93,6 @@ export default function OrderInput(props) {
   }
 
   function handleUpload(csvJson) {
-    // history.push("/orderDisplay");
     history.push({
       pathname: '/orderDisplay',
       state: {
@@ -106,7 +105,7 @@ export default function OrderInput(props) {
     <React.Fragment>
       <Page fullHeight>
         <div className="pad-bottom-20">
-          Choose order
+          Choose orders
         </div>
           <div className={classes.root}>
             <Grid container spacing={3}>

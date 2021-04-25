@@ -9,35 +9,14 @@ import {
 import { AppProvider } from '@shopify/polaris';
 import enTranslations from '@shopify/polaris/locales/en.json';
 
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-
-import { useHistory, Redirect } from "react-router-dom";
-
 import Orders from './OrderInput';
 import OrderDisplay from './OrderDisplay';
 import FetchOrders from './FetchOrders';
-import Carrier from './CarrierData';
-import Pdf from './PreviewPrint';
-
-const useStyles = makeStyles({
-  root: {
-    flexGrow: 1,
-  },
-});
+import Carrier from './CarrierInput';
+import CarrierInput from './CarrierInput';
+import PrintPreview from './PrintPreview';
 
 export default function Routing() {
-  const classes = useStyles();
-  const [value, setValue] = React.useState(0);
-
-  let ordersDisabled;
-  let carrierDisabled = true;
-  let pdfDisabled = true;
-
-  console.log('in routing');
-
   return (
     <Router>
       <AppProvider i18n={enTranslations}>
@@ -46,17 +25,20 @@ export default function Routing() {
             <Route exact path="/">
               <Orders />
             </Route>
+            <Route path="/carrier">
+              <Carrier />
+            </Route>
             <Route exact path="/fetchOrders">
               <FetchOrders />
             </Route>
             <Route exact path="/orderDisplay">
               <OrderDisplay />
             </Route>
-            <Route path="/carrier">
-              <Carrier />
+            <Route exact path="/carrierInput">
+              <CarrierInput />
             </Route>
-            <Route path="/pdf">
-              <Pdf />
+            <Route exact path="/printPreview">
+              <PrintPreview />
             </Route>
           </Switch>
         </div>

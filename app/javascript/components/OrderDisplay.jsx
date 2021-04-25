@@ -6,7 +6,7 @@ import { Page, Card } from '@shopify/polaris';
 import { DataGrid } from '@material-ui/data-grid';
 import Button from '@material-ui/core/Button';
 
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 
 function toTitleCase(str) {
   str = str.replace(/_/g, ' ');
@@ -50,7 +50,7 @@ export default function OrderDisplay(props) {
     console.log(rows);
 
     rows.map((row, index) => {
-      modifiedRows.push(Object.assign(row, { id: index }));
+      modifiedRows.push(Object.assign(row, { id: `${index + '_' + row.Name}` }));
     });
 
     rows = modifiedRows;
@@ -61,11 +61,25 @@ export default function OrderDisplay(props) {
   console.log('selectionModel');
   console.log(selectionModel);
 
+  let nextDisabled = selectionModel.length > 0 ? false : true;
+
+  let history = useHistory();
+
+  function handleNext() {
+    history.push({
+      pathname: '/carrierInput',
+      state: {
+        selectedRowIds: selectionModel,
+        rows: rows,
+      }
+    })
+  }
+
   return (
     <React.Fragment>
       <Page fullHeight>
         <div className="pad-bottom-20">
-          Choose order
+          Choose orders
         </div>
         <Card>
           <div style={{ height: 500, width: '100%' }}>
@@ -80,6 +94,12 @@ export default function OrderDisplay(props) {
             />
           </div>
         </Card>
+        <Button
+          variant="contained" color="primary" onClick={handleNext} className="margin-top-20 pull-right"
+          disabled={nextDisabled}
+        >
+          Next
+        </Button>
       </Page>
     </React.Fragment>
   );

@@ -81,8 +81,6 @@ class FetchOrders extends React.PureComponent {
     const { shopOrigin } = this.props;
     const { error, isLoaded, items } = this.state;
 
-    console.log(items);
-
     let content;
 
     if (error) {
