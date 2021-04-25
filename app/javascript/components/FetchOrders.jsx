@@ -21,9 +21,8 @@ import {
 
 import OrderDisplay from './OrderDisplay';
 import SkeletonPageTemplate from './SkeletonPageTemplate';
-import CarrierData from './CarrierData';
 
-class Home extends React.PureComponent {
+class FetchOrders extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -39,10 +38,7 @@ class Home extends React.PureComponent {
   }
 
   fetchOrders() {
-    console.log('in fetchOrders');
-
     const sessionToken = sessionStorage.getItem("sessionToken");
-
     var headers = new Headers({ "Authorization": "Bearer " + sessionToken });
 
     fetch("/orders", { headers })
@@ -56,16 +52,12 @@ class Home extends React.PureComponent {
             error: true,
           });
         } else {
-          console.log('in else');
           this.setState({
             isLoaded: true,
             items: orders
           });
         }
       },
-      // Note: it's important to handle errors here
-      // instead of a catch() block so that we don't swallow
-      // exceptions from actual bugs in components.
       (error) => {
         this.setState({
           isLoaded: true,
@@ -116,17 +108,14 @@ class Home extends React.PureComponent {
 
     return (
       <div style={{ fontSize: '20px' }}>
-        <CssBaseline />
-        <AppProvider i18n={enTranslations}>
-          {content}
-        </AppProvider>
+        {content}
       </div>
     );
   }
 }
 
-Home.propTypes = {
+FetchOrders.propTypes = {
   shopOrigin: PropTypes.string
 };
 
-export default Home
+export default FetchOrders

@@ -6,8 +6,6 @@ import { Page, Card } from '@shopify/polaris';
 import { DataGrid } from '@material-ui/data-grid';
 import Button from '@material-ui/core/Button';
 
-import CarrierData from './CarrierData';
-
 function toTitleCase(str) {
   str = str.replace(/_/g, ' ');
   return str.replace(
@@ -55,11 +53,6 @@ export default function OrderDisplay(props) {
               selectionModel={selectionModel}
             />
           </div>
-        </Card>
-      </Page>
-      <Page title="Upload carrier file" fullWidth fullHeight>
-        <Card>
-          <CarrierData />
         </Card>
       </Page>
     </React.Fragment>
