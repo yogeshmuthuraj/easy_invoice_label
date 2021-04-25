@@ -108,7 +108,7 @@ class FetchOrders extends React.PureComponent {
     }
 
     return (
-      <div style={{ fontSize: '20px' }}>
+      <div>
         {content}
       </div>
     );

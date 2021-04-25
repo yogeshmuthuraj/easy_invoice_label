@@ -38,36 +38,10 @@ export default function Routing() {
 
   console.log('in routing');
 
-  function handleChange(event, newValue) {
-    setValue(newValue);
-    console.log('newValue: ', newValue);
-
-    if (newValue == 0) {
-      <Redirect push to="/" />
-    } else if (newValue == 1) {
-      <Redirect push to="/carrier" />
-    } else if (newValue == 2) {
-      <Redirect push to="/pdf" />
-    }
-  }
-
   return (
     <Router>
       <AppProvider i18n={enTranslations}>
         <div>
-          <Paper className={classes.root}>
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              indicatorColor="primary"
-              textColor="primary"
-              centered
-             >
-              <Tab label="Orders" disabled={ordersDisabled} />
-              <Tab label="Carrier" disabled={carrierDisabled} />
-              <Tab label="PDF" disabled={pdfDisabled} />
-            </Tabs>
-          </Paper>
           <Switch>
             <Route exact path="/">
               <Orders />

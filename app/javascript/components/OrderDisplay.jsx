@@ -64,6 +64,9 @@ export default function OrderDisplay(props) {
   return (
     <React.Fragment>
       <Page fullHeight>
+        <div className="pad-bottom-20">
+          Choose order
+        </div>
         <Card>
           <div style={{ height: 500, width: '100%' }}>
             <DataGrid

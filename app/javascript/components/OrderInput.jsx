@@ -105,6 +105,9 @@ export default function OrderInput(props) {
   return (
     <React.Fragment>
       <Page fullHeight>
+        <div className="pad-bottom-20">
+          Choose order
+        </div>
           <div className={classes.root}>
             <Grid container spacing={3}>
               <Grid item xs={6}>
