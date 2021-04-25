@@ -20,28 +20,39 @@ function toTitleCase(str) {
 
 export default function OrderDisplay(props) {
   const location = useLocation();
+  let columns = [];
   let rows;
+  let columnHeaders;
 
   if (props.from == 'fetchOrders') {
     rows = props.rows;
+    columnHeaders = Object.keys(rows[0]);
+    rows.shift();
+
+    columnHeaders.map((columnHeader) => {
+      columns.push({
+        field: columnHeader, headerName: toTitleCase(columnHeader), sortable: true, width: 200
+      })
+    });
   } else {
-    rows = location.state.rows;
+    let modifiedRows = [];
+
+    rows = JSON.parse(location.state.rows);
+    columnHeaders = Object.keys(rows[0]);
+    rows.shift();
+
+    columnHeaders.map((columnHeader) => {
+      columns.push({
+        field: columnHeader, headerName: toTitleCase(columnHeader), sortable: true, width: 200
+      })
+    });
+
+    rows.map((row, index) => {
+      modifiedRows.push(Object.assign(row, { id: index }));
+    });
+
+    rows = modifiedRows;
   }
-
-  const columnHeaders = Object.keys(rows[0]);
-  let columns = [];
-  const isRowSelected = true;
-
-  rows.map((row, index) => {
-    var header = columnHeaders[index];
-    console.log('header', header);
-    var width = (header.length) * 50;
-    console.log('width', width);
-
-    columns.push({
-      field: header, headerName: toTitleCase(header), sortable: true, width: width
-    })
-  });
 
   const [selectionModel, setSelectionModel] = React.useState([]);
 

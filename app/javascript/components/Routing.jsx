@@ -36,6 +36,8 @@ export default function Routing() {
   let carrierDisabled = true;
   let pdfDisabled = true;
 
+  console.log('in routing');
+
   function handleChange(event, newValue) {
     setValue(newValue);
     console.log('newValue: ', newValue);

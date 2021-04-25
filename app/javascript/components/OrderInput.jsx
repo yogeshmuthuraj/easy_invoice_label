@@ -95,7 +95,7 @@ export default function OrderInput(props) {
   function handleUpload(csvJson) {
     // history.push("/orderDisplay");
     history.push({
-      pathname: '/fetchOrders',
+      pathname: '/orderDisplay',
       state: {
         rows: csvJson,
       }
