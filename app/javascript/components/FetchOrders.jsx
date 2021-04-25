@@ -72,6 +72,7 @@ class FetchOrders extends React.PureComponent {
       isLoaded: false,
       error: null,
     });
+
     this.fetchOrders();
   }
 
@@ -86,7 +87,7 @@ class FetchOrders extends React.PureComponent {
 
     if (error) {
       content = (
-        <Page fullWidth fullHeight>
+        <Page fullHeight>
           <Card>
             <Alert severity="error" style={{ fontSize: '20px' }}>
               <AlertTitle style={{ fontSize: '20px' }}>Error</AlertTitle>
@@ -102,7 +103,7 @@ class FetchOrders extends React.PureComponent {
       content = <SkeletonPageTemplate fullWidth />
     } else {
       content = (
-        <OrderDisplay rows={items} />
+        <OrderDisplay rows={items} from="fetchOrders" />
       );
     }
 

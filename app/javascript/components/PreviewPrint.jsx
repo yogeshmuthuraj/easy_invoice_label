@@ -24,7 +24,7 @@ export default function PrintPreview(props) {
 
   return (
     <React.Fragment>
-      <Page fullWidth fullHeight>
+      <Page fullHeight>
         <Card>
           <div className={classes.root}>
             <Grid container spacing={3}>

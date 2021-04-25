@@ -6,6 +6,8 @@ import { Page, Card } from '@shopify/polaris';
 import { DataGrid } from '@material-ui/data-grid';
 import Button from '@material-ui/core/Button';
 
+import { useLocation } from "react-router-dom";
+
 function toTitleCase(str) {
   str = str.replace(/_/g, ' ');
   return str.replace(
@@ -17,7 +19,15 @@ function toTitleCase(str) {
 }
 
 export default function OrderDisplay(props) {
-  const { rows } = props;
+  const location = useLocation();
+  let rows;
+
+  if (props.from == 'fetchOrders') {
+    rows = props.rows;
+  } else {
+    rows = location.state.rows;
+  }
+
   const columnHeaders = Object.keys(rows[0]);
   let columns = [];
   const isRowSelected = true;
@@ -40,7 +50,7 @@ export default function OrderDisplay(props) {
 
   return (
     <React.Fragment>
-      <Page title="Choose orders" fullWidth fullHeight>
+      <Page fullHeight>
         <Card>
           <div style={{ height: 500, width: '100%' }}>
             <DataGrid
