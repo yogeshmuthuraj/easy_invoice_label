@@ -10,6 +10,8 @@ import Grid from '@material-ui/core/Grid';
 
 import { useHistory, useLocation } from "react-router-dom";
 
+import Barcode from 'react-barcode';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -73,11 +75,17 @@ export default function CarrierInput(props) {
 
   const handleFileRead = (e) => {
     const content = fileReader.result;
-    const csvJson = csvToJSON(content);
-    handleUpload(csvJson)
+
+    const csv = require('csvtojson');
+
+    (async () => {
+      const jsonObj = await csv().fromString(content)
+
+      handleUpload(jsonObj)
+    })();
   }
 
-  let history = useHistory();
+  const history = useHistory();
   const location = useLocation();
 
   function handleUpload(carrierRows) {
@@ -95,28 +103,91 @@ export default function CarrierInput(props) {
       })
     })
 
-    let mergedCsv = mergeCsvs(selectedOrderRows, JSON.parse(carrierRows))
-    let sortedCsv = sortingBasedOnCarrier(mergedCsv);
+    let mergedRows = mergeCsvs(selectedOrderRows, carrierRows)
+    console.log(groupSameOrders(mergedRows));
+
+    // let sortedCsvObject = sortingBasedOnCarrier(mergedRows);
+    // console.log('sorted');
+    // console.log(sortedCsvObject);
+
+
+
+    // history.push({
+    //   pathname: '/printPreview',
+    //   state: {
+    //     rows: csvJson,
+    //   }
+    // });
   }
 
   function mergeCsvs(selectedOrderRows, carrierRows) {
-    console.log('carrierRows; ', carrierRows);
-    console.log(selectedOrderRows);
-    let mergedCsv = [];
+    let mergedRows = [];
 
     selectedOrderRows.map((selectedOrderRow, index) => {
       carrierRows.map((carrierRow) => {
         if (selectedOrderRows[index].Name == carrierRow.Name) {
-          mergedCsv.push(Object.assign(selectedOrderRows[index], carrierRow))
+          mergedRows.push(Object.assign(selectedOrderRows[index], carrierRow))
         }
       });
     });
 
-    return mergedCsv;
+    return mergedRows;
   }
 
-  function sortingBasedOnCarrier(mergedCsv) {
-    return mergedCsv.sort((a, b) => (a.color > b.color) ? 1 : (a.color === b.color) ? ((a.size > b.size) ? 1 : -1) : -1 );
+  function sortingBasedOnCarrier(csvObject) {
+    return csvObject.sort((a, b) => (a.Carrier > b.Carrier) ? 1 : (a.Carrier === b.Carrier) ? ((a.size > b.size) ? 1 : -1) : -1 );
+  }
+
+  function groupSameOrders(mergedRows) {
+    let compareClonedRows = Object.assign(mergedRows);
+    let groupedOrders = [];
+
+    console.log('mergedRows');
+    console.log(mergedRows);
+
+    mergedRows.map((mergedRow, index) => {
+      let tempDetails = [];
+
+      compareClonedRows.map((compareClonedRow) => {
+        if (mergedRows[index].Name == compareClonedRow.Name) {
+          tempDetails.push({
+            'Lineitem name': compareClonedRow['Lineitem name'],
+            'Lineitem price': compareClonedRow['Lineitem price'],
+            'Lineitem sku': compareClonedRow['Lineitem sku'],
+            'Tax 1 Name': compareClonedRow['Tax 1 Name'],
+            'Tax 1 Value': compareClonedRow['Tax 1 Value'],
+            'Tax 2 Name': compareClonedRow['Tax 2 Name'],
+            'Tax 2 Value': compareClonedRow['Tax 2 Value'],
+            'Currency': compareClonedRow['Currency']
+          });
+        }
+      });
+
+      groupedOrders.push({
+        'Name': mergedRow['Name'],
+        'Carrier': mergedRow['Carrier'],
+        'AWB': mergedRow['AWB'],
+        'Taxes': mergedRow['Taxes'],
+        'Total': mergedRow['Total'],
+        'Outstanding Balance': mergedRow['Outstanding Balance'],
+        'Created at': mergedRow['Created at'],
+        'Shipping Name': mergedRow['Shipping Name'],
+        'Shipping Address1': mergedRow['Shipping Address1'],
+        'Shipping Address2': mergedRow['Shipping Address2'],
+        'Shipping Street': mergedRow['Shipping Street'],
+        'Shipping City': mergedRow['Shipping City'],
+        'Shipping Zip': mergedRow['Shipping Zip'],
+        'Shipping Province': mergedRow['Shipping Province'],
+        'Payment Method': mergedRow['Payment Method'],
+        'More Details': tempDetails
+      });
+    });
+
+    return groupedOrders;
+  }
+
+  function barcode(value) {
+    return <Barcode value={value} />;
   }
 
   function handleCancel() {

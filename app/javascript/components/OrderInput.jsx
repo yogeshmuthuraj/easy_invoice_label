@@ -82,8 +82,14 @@ export default function OrderInput(props) {
 
   const handleFileRead = (e) => {
     const content = fileReader.result;
-    const csvJson = csvToJSON(content);
-    handleUpload(csvJson)
+
+    const csv = require('csvtojson');
+
+    (async () => {
+      const jsonObj = await csv().fromString(content)
+
+      handleUpload(jsonObj)
+    })();
   }
 
   let history = useHistory();

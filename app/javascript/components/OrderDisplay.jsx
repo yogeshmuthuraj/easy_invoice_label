@@ -36,7 +36,7 @@ export default function OrderDisplay(props) {
   } else {
     let modifiedRows = [];
 
-    rows = JSON.parse(location.state.rows);
+    rows = location.state.rows;
     columnHeaders = Object.keys(rows[0]);
 
     columnHeaders.map((columnHeader) => {
