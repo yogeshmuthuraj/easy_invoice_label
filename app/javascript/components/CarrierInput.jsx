@@ -95,12 +95,12 @@ export default function CarrierInput(props) {
     console.log(sortedOrders);
 
 
-    // history.push({
-    //   pathname: '/printPreview',
-    //   state: {
-    //     rows: csvJson,
-    //   }
-    // });
+    history.push({
+      pathname: '/printPreview',
+      state: {
+        orderRows: sortedOrders,
+      }
+    });
   }
 
   function groupSameOrders(selectedOrderRows) {

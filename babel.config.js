@@ -45,6 +45,7 @@ module.exports = function(api) {
         }
       ]
     ].filter(Boolean),
+    "sourceType": "unambiguous",
     plugins: [
       'babel-plugin-macros',
       '@babel/plugin-syntax-dynamic-import',
