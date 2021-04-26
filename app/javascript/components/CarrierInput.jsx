@@ -53,26 +53,6 @@ export default function CarrierInput(props) {
     fileReader.readAsText(file);
   }
 
-  //var csv is the CSV file with headers
-  function csvToJSON(csv){
-    var lines=csv.split("\n");
-    var result = [];
-    var headers=lines[0].split(",");
-
-    for (var i=1;i<lines.length;i++){
-  	  var obj = {};
-  	  var currentline=lines[i].split(",");
-
-  	  for(var j=0;j<headers.length;j++){
-  		  obj[headers[j]] = currentline[j];
-  	  }
-  	  result.push(obj);
-    }
-
-    //return result; //JavaScript object
-    return JSON.stringify(result); //JSON
-  }
-
   const handleFileRead = (e) => {
     const content = fileReader.result;
 
@@ -103,13 +83,16 @@ export default function CarrierInput(props) {
       })
     })
 
-    let mergedRows = mergeCsvs(selectedOrderRows, carrierRows)
-    console.log(groupSameOrders(mergedRows));
+    let groupedOrders = groupSameOrders(selectedOrderRows);
 
-    // let sortedCsvObject = sortingBasedOnCarrier(mergedRows);
-    // console.log('sorted');
-    // console.log(sortedCsvObject);
+    let mergedOrders = mergeRows(groupedOrders, carrierRows)
 
+    let filteredUniqueOrders = uniqueOrders(mergedOrders);
+
+    let sortedOrders = sortingBasedOnCarrier(filteredUniqueOrders);
+
+    console.log('sortedOrders');
+    console.log(sortedOrders);
 
 
     // history.push({
@@ -120,36 +103,18 @@ export default function CarrierInput(props) {
     // });
   }
 
-  function mergeCsvs(selectedOrderRows, carrierRows) {
-    let mergedRows = [];
-
-    selectedOrderRows.map((selectedOrderRow, index) => {
-      carrierRows.map((carrierRow) => {
-        if (selectedOrderRows[index].Name == carrierRow.Name) {
-          mergedRows.push(Object.assign(selectedOrderRows[index], carrierRow))
-        }
-      });
-    });
-
-    return mergedRows;
-  }
-
-  function sortingBasedOnCarrier(csvObject) {
-    return csvObject.sort((a, b) => (a.Carrier > b.Carrier) ? 1 : (a.Carrier === b.Carrier) ? ((a.size > b.size) ? 1 : -1) : -1 );
-  }
-
-  function groupSameOrders(mergedRows) {
-    let compareClonedRows = Object.assign(mergedRows);
+  function groupSameOrders(selectedOrderRows) {
+    let compareClonedRows = Object.assign(selectedOrderRows);
     let groupedOrders = [];
 
-    console.log('mergedRows');
-    console.log(mergedRows);
+    console.log('selectedOrderRows');
+    console.log(selectedOrderRows);
 
-    mergedRows.map((mergedRow, index) => {
+    selectedOrderRows.map((selectedOrderRow, index) => {
       let tempDetails = [];
 
       compareClonedRows.map((compareClonedRow) => {
-        if (mergedRows[index].Name == compareClonedRow.Name) {
+        if (selectedOrderRows[index].Name == compareClonedRow.Name) {
           tempDetails.push({
             'Lineitem name': compareClonedRow['Lineitem name'],
             'Lineitem price': compareClonedRow['Lineitem price'],
@@ -164,26 +129,46 @@ export default function CarrierInput(props) {
       });
 
       groupedOrders.push({
-        'Name': mergedRow['Name'],
-        'Carrier': mergedRow['Carrier'],
-        'AWB': mergedRow['AWB'],
-        'Taxes': mergedRow['Taxes'],
-        'Total': mergedRow['Total'],
-        'Outstanding Balance': mergedRow['Outstanding Balance'],
-        'Created at': mergedRow['Created at'],
-        'Shipping Name': mergedRow['Shipping Name'],
-        'Shipping Address1': mergedRow['Shipping Address1'],
-        'Shipping Address2': mergedRow['Shipping Address2'],
-        'Shipping Street': mergedRow['Shipping Street'],
-        'Shipping City': mergedRow['Shipping City'],
-        'Shipping Zip': mergedRow['Shipping Zip'],
-        'Shipping Province': mergedRow['Shipping Province'],
-        'Payment Method': mergedRow['Payment Method'],
+        'Name': selectedOrderRow['Name'],
+        'Taxes': selectedOrderRow['Taxes'],
+        'Total': selectedOrderRow['Total'],
+        'Outstanding Balance': selectedOrderRow['Outstanding Balance'],
+        'Created at': selectedOrderRow['Created at'],
+        'Shipping Name': selectedOrderRow['Shipping Name'],
+        'Shipping Address1': selectedOrderRow['Shipping Address1'],
+        'Shipping Address2': selectedOrderRow['Shipping Address2'],
+        'Shipping Street': selectedOrderRow['Shipping Street'],
+        'Shipping City': selectedOrderRow['Shipping City'],
+        'Shipping Zip': selectedOrderRow['Shipping Zip'],
+        'Shipping Province': selectedOrderRow['Shipping Province'],
+        'Payment Method': selectedOrderRow['Payment Method'],
         'More Details': tempDetails
       });
     });
 
     return groupedOrders;
+  }
+
+  function uniqueOrders(groupedOrders) {
+    return groupedOrders.filter((v,i,a)=>a.findIndex(t=>(t.Name === v.Name))===i);
+  }
+
+  function mergeRows(filteredUniqueOrders, carrierRows) {
+    let mergedRows = [];
+
+    filteredUniqueOrders.map((filteredUniqueOrder, index) => {
+      carrierRows.map((carrierRow) => {
+        if (filteredUniqueOrders[index].Name == carrierRow.Name) {
+          mergedRows.push(Object.assign(filteredUniqueOrders[index], carrierRow))
+        }
+      });
+    });
+
+    return mergedRows;
+  }
+
+  function sortingBasedOnCarrier(csvObject) {
+    return csvObject.sort((a, b) => (a.Carrier > b.Carrier) ? 1 : (a.Carrier === b.Carrier) ? ((a.size > b.size) ? 1 : -1) : -1 );
   }
 
   function barcode(value) {
